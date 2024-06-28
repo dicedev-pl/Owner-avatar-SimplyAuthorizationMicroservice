@@ -10,4 +10,3 @@ WORKDIR /jars
 COPY --from=builder /usr/src/app/target/*.jar app.jar
 EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]
-authentication.jar"]
