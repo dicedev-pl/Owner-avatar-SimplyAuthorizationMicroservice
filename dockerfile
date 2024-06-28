@@ -1,7 +1,13 @@
-FROM khipu/openjdk17-alpine:latest
-LABEL maintainer="simplyAuthMicroservice"
+FROM maven:3.9.6-eclipse-temurin-21-jammy as builder
+WORKDIR /usr/src/app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package
+
+FROM openjdk:21-jdk-slim
 RUN mkdir jars && cd jars
 WORKDIR /jars
-COPY target/SimplyAuthorizationMicroservice-1.0.0.jar authentication.jar
+COPY --from=builder /usr/src/app/target/*.jar app.jar
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "authentication.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
+authentication.jar"]
