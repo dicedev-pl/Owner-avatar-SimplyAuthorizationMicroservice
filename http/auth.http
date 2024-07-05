@@ -1,0 +1,17 @@
+POST localhost:8081/v1/authentication/credentials/body
+Content-Type: application/json
+
+{
+  "username": "ala",
+  "password": "ala"
+}
+
+###
+POST localhost:8081/v2/authentication/add
+Content-Type: application/json
+user-id:QjQ5NUJFNT
+
+{
+  "username": "ala",
+  "password": "BCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY="
+}
