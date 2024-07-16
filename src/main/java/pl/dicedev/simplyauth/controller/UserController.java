@@ -7,6 +7,7 @@ import pl.dicedev.simplyauth.service.UserService;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v2/authentication")
@@ -16,7 +17,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/add")
-    public boolean addNewUser(
+    public UUID addNewUser(
             @RequestHeader("user-id") String userId,
             @RequestBody AuthUserDto authUserDto
             ) {
@@ -25,9 +26,8 @@ public class UserController {
         byte[] afterDecode = Base64.getDecoder().decode(credentials);
         String hash = new String(afterDecode, StandardCharsets.UTF_8);
 
-        userService.addUser(hash, authUserDto.getUsername());
+        return userService.addUser(hash, authUserDto.getUsername());
 
-        return true;
     }
 
 }
