@@ -13,5 +13,8 @@ user-id:QjQ5NUJFNT
 
 {
   "username": "ala",
-  "password": "BCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY="
+  "password": "BCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY=",
+  "rights": [
+    "USER"
+  ]
 }

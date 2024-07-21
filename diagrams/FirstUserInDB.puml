@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Backend -> Backend: Start
+Backend -> DB: Is one User in DB
+DB -> Backend: NO
+Backend -> DB: Create default user (Only add new users)
+
+@enduml
+
+@startuml
+
+enum Rights {
+    USER,
+    TRAINEE,
+    ADD_USERS,
+    REMOVE_USERS,
+    ORDER_FOOD,
+    ADD_RESERVATIONS,
+    REMOVE_RESERVATIONS,
+}
+
+class UserEntity {
+    - id: UUID
+    - username: String
+    - password: String
+    - rights[]: Rights
+    - createdTime: Date
+
+}
+
+Rights <- UserEntity
+
+@enduml
