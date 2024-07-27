@@ -1,0 +1,41 @@
+
+@startuml
+
+enum Rights {
+    USER = "name", "position"
+    TRAINEE = "nickname", "nn"
+    ADD_USERS = "au", "create"
+    REMOVE_USERS = "ru", "delete"
+    ORDER_FOOD = "login", "company"
+    ADD_RESERVATIONS = "ar", "customer"
+    REMOVE_RESERVATIONS = "rr", "customer"
+}
+
+class Token {
+    - ust: String
+    - xst: String
+    - name: String
+    - rights: String
+    - timestart: String
+    - timeend: String
+}
+
+@enduml
+
+
+@startuml
+
+
+autonumber
+
+Frontend -> Backend: send login & password
+Backend -> DB: user exists
+DB -> Backend: Yes
+Backend -> Backend: Prepare Token
+Backend -> Frontend: send token
+Frontend -> Backend: do something [send token in headers]
+Backend -> Backend: token OK
+Backend -> Backend: doing something
+
+
+@enduml
