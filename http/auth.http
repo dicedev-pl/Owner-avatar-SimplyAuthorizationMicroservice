@@ -10,6 +10,7 @@ Content-Type: application/json
 POST localhost:8081/v2/authentication/add
 Content-Type: application/json
 user-id:QjQ5NUJFNT
+token: Bearer {{token}}
 
 {
   "username": "ala",
@@ -17,4 +18,13 @@ user-id:QjQ5NUJFNT
   "rights": [
     "USER"
   ]
+}
+
+###
+POST localhost:8081/v2/authentication/login
+Content-Type: application/json
+
+{
+  "login": "Admin",
+  "password": "B495BE50B478D72A21D890A0DDB0B726"
 }
