@@ -26,4 +26,13 @@ public enum Rights {
     public String getXst() {
         return xst;
     }
+
+    public static Rights findByName(String value) {
+        for (Rights r : values()) {
+            if (r.name().equals(value)) {
+                return r;
+            }
+        }
+        return null;
+    }
 }
