@@ -8,11 +8,11 @@ import pl.dicedev.simplyauth.enums.Rights;
 import pl.dicedev.simplyauth.repository.UserCredentialsRepository;
 import pl.dicedev.simplyauth.repository.entity.UserEntity;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Set;
 import java.util.UUID;
+
+import static pl.dicedev.simplyauth.utils.PasswordUtil.preparePasswdHash;
 
 @Component
 @AllArgsConstructor
@@ -46,8 +46,4 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
                 .build();
     }
 
-    private String preparePasswdHash(String pw) {
-        byte[] afterDecode = Base64.getDecoder().decode(pw);
-        return new String(afterDecode, StandardCharsets.UTF_8);
-    }
 }

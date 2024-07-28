@@ -6,22 +6,30 @@ import pl.dicedev.simplyauth.dto.AuthDto;
 import pl.dicedev.simplyauth.dto.AuthUserDto;
 import pl.dicedev.simplyauth.dto.CredentialsDto;
 import pl.dicedev.simplyauth.enums.Rights;
+import pl.dicedev.simplyauth.enums.TokenSeparators;
 import pl.dicedev.simplyauth.repository.UserCredentialsRepository;
 import pl.dicedev.simplyauth.repository.entity.UserEntity;
+import pl.dicedev.simplyauth.utils.PasswordUtil;
+import pl.dicedev.simplyauth.validators.RightsFromToken;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Base64;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import static pl.dicedev.simplyauth.utils.PasswordUtil.preparePasswdHash;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
     private final UserCredentialsRepository userCredentialsRepository;
+    private final RightsFromToken rightsFromToken;
 
     public UUID addUser(String pwPrefix, AuthUserDto authUserDto, String token) {
+        Map<Rights, Boolean> rights = rightsFromToken.getValidatedRights(token);
+        if (!rights.get(Rights.ADD_USERS)) return UUID.fromString("0");
+
         UserEntity entity = prepareUserEntity(pwPrefix, authUserDto);
         var savedEntity = userCredentialsRepository.save(entity);
 
@@ -29,7 +37,8 @@ public class UserService {
     }
 
     public AuthDto login(CredentialsDto credentialsDto) {
-        UserEntity userEntity = userCredentialsRepository.findByUsernameAndPassword(credentialsDto.getLogin(), credentialsDto.getPassword());
+        String hashedPw = PasswordUtil.preparePasswdHash(credentialsDto.getPassword());
+        UserEntity userEntity = userCredentialsRepository.findByUsernameAndPassword(credentialsDto.getLogin(), hashedPw);
         if (userEntity == null) return new AuthDto(null);
         String token = buildToken(userEntity);
 
@@ -37,10 +46,10 @@ public class UserService {
     }
 
     private String buildToken(UserEntity userEntity) {
-        return "ust:" + prepareUSTRights(userEntity.getRights()) +
-                "+xst:" + prepareXSTRights(userEntity.getRights()) +
-                "+name:" + userEntity.getUsername() +
-                "+rights:" + userEntity.getRights().toString()
+        return "ust:" + prepareUSTRights(userEntity.getRights()) + TokenSeparators.SECTIONS.getSeparator() +
+                "xst:" + prepareXSTRights(userEntity.getRights()) + TokenSeparators.SECTIONS.getSeparator() +
+                "name:" + userEntity.getUsername() + TokenSeparators.SECTIONS.getSeparator() +
+                "rights:" + userEntity.getRights().toString()
                 .trim();
     }
 
@@ -48,7 +57,7 @@ public class UserService {
         StringBuilder rightToToken = new StringBuilder();
         for (Rights right : rights) {
             rightToToken.append(right.getUst());
-            rightToToken.append("-");
+            rightToToken.append(TokenSeparators.DETAIL.getSeparator());
         }
         rightToToken.deleteCharAt(rightToToken.length() - 1);
         return rightToToken.toString();
@@ -58,14 +67,14 @@ public class UserService {
         StringBuilder rightToToken = new StringBuilder();
         for (Rights right : rights) {
             rightToToken.append(right.getXst());
-            rightToToken.append("-");
+            rightToToken.append(TokenSeparators.DETAIL.getSeparator());
         }
         rightToToken.deleteCharAt(rightToToken.length() - 1);
         return rightToToken.toString();
     }
 
     private UserEntity prepareUserEntity(String pwPrefix, AuthUserDto authUserDto) {
-        String passwdHash = preparePasswdHash(pwPrefix, authUserDto);
+        String passwdHash = preparePasswdHash(pwPrefix + authUserDto.getPassword());
 
         return UserEntity.builder()
                 .id(UUID.randomUUID())
@@ -76,9 +85,4 @@ public class UserService {
                 .build();
     }
 
-    private String preparePasswdHash(String pwPrefix, AuthUserDto authUserDto) {
-        String credentials = pwPrefix + authUserDto.getPassword();
-        byte[] afterDecode = Base64.getDecoder().decode(credentials);
-        return new String(afterDecode, StandardCharsets.UTF_8);
-    }
 }
