@@ -8,7 +8,7 @@ public enum Rights {
     REMOVE_USERS ("ru", "delete"),
     ORDER_FOOD ("login", "company"),
     ADD_RESERVATIONS ("ar", "customer"),
-    REMOVE_RESERVATIONS ("rr", "customer"),
+    REMOVE_RESERVATIONS ("rr", "cut"),
     ;
 
     private final String ust;
