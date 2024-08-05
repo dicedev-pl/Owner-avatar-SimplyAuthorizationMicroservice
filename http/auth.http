@@ -25,6 +25,11 @@ POST localhost:8081/v2/authentication/login
 Content-Type: application/json
 
 {
-  "login": "Admin",
+  "login": "Root",
   "password": "QjQ5NUJFNTBCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY="
 }
+
+###
+POST localhost:8081/v2/token/valid?right=ADD_RESERVATIONS
+Content-Type: application/json
+Token: ust:name-nickname-au-ru-login-ar-rr+xst:position-nn-create-delete-company-customer-cut+name:Root+rights:[USER, TRAINEE, ADD_USERS, REMOVE_USERS, ORDER_FOOD, ADD_RESERVATIONS, REMOVE_RESERVATIONS]

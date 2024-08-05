@@ -9,8 +9,7 @@ import pl.dicedev.simplyauth.repository.UserCredentialsRepository;
 import pl.dicedev.simplyauth.repository.entity.UserEntity;
 
 import java.time.Instant;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static pl.dicedev.simplyauth.utils.PasswordUtil.preparePasswdHash;
 
@@ -30,8 +29,22 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
 
         if (countUsers == 0) {
             UserEntity userEntity = prepareUserEntity("QjQ5NUJFNTBCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY=");
-            userCredentialsRepository.save(userEntity);
+            UserEntity rootEntity = prepareRootEntity("QjQ5NUJFNTBCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY=");
+            userCredentialsRepository.saveAll(List.of(userEntity, rootEntity));
         }
+    }
+
+    private UserEntity prepareRootEntity(String pw) {
+        String passwdHash = preparePasswdHash(pw);
+        Set<Rights> allRights = EnumSet.allOf(Rights.class);
+
+        return UserEntity.builder()
+                .id(UUID.randomUUID())
+                .username("Root")
+                .password(passwdHash)
+                .createAt(Instant.now())
+                .rights(allRights)
+                .build();
     }
 
     private UserEntity prepareUserEntity(String pw) {

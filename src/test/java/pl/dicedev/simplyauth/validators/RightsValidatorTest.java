@@ -6,6 +6,7 @@ import pl.dicedev.simplyauth.enums.Rights;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RightsValidatorTest {
@@ -23,6 +24,20 @@ class RightsValidatorTest {
 
         // then
         assertTrue(rights.get(Rights.ADD_USERS));
+
+    }
+
+    @Test
+    void shouldParseTheFalseIfTokenHasInvalidRight() {
+        // given
+        String token = "ust:au+xst:create+name:Admin+rights:[ADD_USER]";
+        Map<Rights, Boolean> rights = new HashMap<>();
+
+        // when
+        validator.validate(rights, token);
+
+        // then
+        assertFalse(rights.get(Rights.ADD_USERS));
 
     }
 }
