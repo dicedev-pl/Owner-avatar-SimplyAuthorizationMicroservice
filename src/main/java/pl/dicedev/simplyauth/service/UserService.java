@@ -1,6 +1,8 @@
 package pl.dicedev.simplyauth.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.dicedev.simplyauth.dto.AuthDto;
 import pl.dicedev.simplyauth.dto.AuthUserDto;
@@ -21,12 +23,14 @@ import static pl.dicedev.simplyauth.utils.PasswordUtil.preparePasswdHash;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserCredentialsRepository userCredentialsRepository;
     private final RightsFromToken rightsFromToken;
 
     public UUID addUser(String pwPrefix, AuthUserDto authUserDto, String token) {
+        log.info("Adding user {}", token);
         Map<Rights, Boolean> rights = rightsFromToken.getValidatedRights(token);
         if (!rights.get(Rights.ADD_USERS)) return UUID.fromString("0");
 
@@ -37,6 +41,7 @@ public class UserService {
     }
 
     public AuthDto login(CredentialsDto credentialsDto) {
+        System.out.println(credentialsDto);
         String hashedPw = PasswordUtil.preparePasswdHash(credentialsDto.getPassword());
         UserEntity userEntity = userCredentialsRepository.findByUsernameAndPassword(credentialsDto.getLogin(), hashedPw);
         if (userEntity == null) return new AuthDto(null);

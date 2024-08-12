@@ -1,5 +1,8 @@
 package pl.dicedev.simplyauth.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Rights {
 
     USER ("name", "position"),
@@ -17,14 +20,6 @@ public enum Rights {
     Rights(String ust, String xst) {
         this.ust = ust;
         this.xst = xst;
-    }
-
-    public String getUst() {
-        return ust;
-    }
-
-    public String getXst() {
-        return xst;
     }
 
     public static Rights findByName(String value) {
