@@ -1,5 +1,8 @@
 package pl.dicedev.simplyauth.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TokenSeparators {
     SECTIONS("+"),
     DETAIL("-"),
@@ -9,10 +12,6 @@ public enum TokenSeparators {
 
     TokenSeparators(String separator) {
         this.separator = separator;
-    }
-
-    public String getSeparator() {
-        return separator;
     }
 
     public String getSeparatorWithEscape() {
