@@ -28,8 +28,8 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
         int countUsers = userCredentialsRepository.findAll().size();
 
         if (countUsers == 0) {
-            UserEntity userEntity = prepareUserEntity("ZjJiNTBhNGJlNDFmZDg0ZjYyMWEyZmZiNGY0MWFhOTI=");
-            UserEntity rootEntity = prepareRootEntity("YTliZjFiOWE2ZDRhYzEwOTI4MWQ1NjAwZGU1MGRkMjM=");
+            UserEntity userEntity = prepareUserEntity("ZTNhZmVkMDA0N2IwODA1OWQwZmFkYTEwZjQwMGMxZTU="); // Admin
+            UserEntity rootEntity = prepareRootEntity("YTliZjFiOWE2ZDRhYzEwOTI4MWQ1NjAwZGU1MGRkMjM="); // RootMaKota
             userCredentialsRepository.saveAll(List.of(userEntity, rootEntity));
         }
     }

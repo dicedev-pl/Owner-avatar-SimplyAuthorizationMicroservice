@@ -4,7 +4,7 @@ services:
   mongoAli:
     image: mongo:7.0.12
     ports:
-      - "27019:27017"
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ala
       MONGO_INITDB_ROOT_PASSWORD: alamakota

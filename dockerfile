@@ -8,5 +8,5 @@ FROM openjdk:21-jdk-slim
 RUN mkdir jars && cd jars
 WORKDIR /jars
 COPY --from=builder /usr/src/app/target/*.jar app.jar
-EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=docker", "--spring.config.name=application-docker"]
