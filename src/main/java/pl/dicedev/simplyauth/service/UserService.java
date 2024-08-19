@@ -1,7 +1,6 @@
 package pl.dicedev.simplyauth.service;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.dicedev.simplyauth.dto.AuthDto;
@@ -18,8 +17,6 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
-import static pl.dicedev.simplyauth.utils.PasswordUtil.preparePasswdHash;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +39,7 @@ public class UserService {
 
     public AuthDto login(CredentialsDto credentialsDto) {
         System.out.println(credentialsDto);
-        String hashedPw = PasswordUtil.preparePasswdHash(credentialsDto.getPassword());
+        String hashedPw = PasswordUtil.decodePasswdFromBash64(credentialsDto.getPassword());
         UserEntity userEntity = userCredentialsRepository.findByUsernameAndPassword(credentialsDto.getLogin(), hashedPw);
         if (userEntity == null) return new AuthDto(null);
         String token = buildToken(userEntity);
@@ -79,7 +76,7 @@ public class UserService {
     }
 
     private UserEntity prepareUserEntity(String pwPrefix, AuthUserDto authUserDto) {
-        String passwdHash = preparePasswdHash(pwPrefix + authUserDto.getPassword());
+        String passwdHash = PasswordUtil.decodePasswdFromBash64(pwPrefix + authUserDto.getPassword());
 
         return UserEntity.builder()
                 .id(UUID.randomUUID())

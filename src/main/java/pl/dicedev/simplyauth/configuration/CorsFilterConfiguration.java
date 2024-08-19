@@ -10,9 +10,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableConfigurationProperties(CorsFilterProperties.class)
 @RequiredArgsConstructor
@@ -29,11 +26,25 @@ public class CorsFilterConfiguration {
     }
 
     private CorsConfiguration buildCorsConfiguration() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("*"));
-        configuration.setAllowedHeaders(List.of("*"));
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
 
-        return configuration;
+        if (properties.getMaxAge() != null) {
+            config.setMaxAge(properties.getMaxAge());
+        }
+
+        if (!CollectionUtils.isEmpty(properties.getAllowedMethods())) {
+            config.setAllowedMethods(properties.getAllowedMethods());
+        }
+
+        if (!CollectionUtils.isEmpty(properties.getAllowedHeaders())) {
+            config.setAllowedHeaders(properties.getAllowedHeaders());
+        }
+
+        if (!CollectionUtils.isEmpty(properties.getAllowedOrigins())) {
+            config.setAllowedOrigins(properties.getAllowedOrigins());
+        }
+
+        return config;
     }
 }
