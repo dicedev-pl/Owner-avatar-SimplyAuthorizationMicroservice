@@ -1,12 +1,3 @@
-POST localhost:8081/v1/authentication/credentials/body
-Content-Type: application/json
-
-{
-  "username": "ala",
-  "password": "ala"
-}
-
-###
 POST localhost:8081/v2/authentication/add
 Content-Type: application/json
 user-id:QjQ5NUJFNT
@@ -25,8 +16,8 @@ POST localhost:8081/v2/authentication/login
 Content-Type: application/json
 
 {
-  "login": "Root",
-  "password": "QjQ5NUJFNTBCNDc4RDcyQTIxRDg5MEEwRERCMEI3MjY="
+  "login": "qaz",
+  "password": "ZmM0ZTBkZTA4ZmE2MmY2ZmM5MGJhNTEyZTU0YmVlNDI="
 }
 
 ###
