@@ -11,7 +11,10 @@ import pl.dicedev.simplyauth.repository.entity.UserEntity;
 import pl.dicedev.simplyauth.utils.PasswordUtil;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,6 +27,9 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        int countUsers = userCredentialsRepository.findAll().size();
+        if (countUsers != 0)  return;
+
         if (customInitUser.isValid()) {
             initCustomUser();
         } else {
@@ -41,7 +47,7 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
             userRights = EnumSet.allOf(Rights.class);
         }
 
-        UserEntity userEntity =  UserEntity.builder()
+        UserEntity userEntity = UserEntity.builder()
                 .id(UUID.randomUUID())
                 .username(customInitUser.getName())
                 .password(PasswordUtil.encodePasswdToMd5(customInitUser.getName(), customInitUser.getPassword()))
@@ -54,13 +60,9 @@ public class InitDBByFirstUser implements ApplicationListener<ContextRefreshedEv
 
 
     private void initDefaultUsers() {
-        int countUsers = userCredentialsRepository.findAll().size();
-
-        if (countUsers == 0) {
-            UserEntity userEntity = prepareUserEntity("Admin", "AdminMaKota");
-            UserEntity rootEntity = prepareRootEntity("RootMaKota");
-            userCredentialsRepository.saveAll(List.of(userEntity, rootEntity));
-        }
+        UserEntity userEntity = prepareUserEntity("Admin", "AdminMaKota");
+        UserEntity rootEntity = prepareRootEntity("RootMaKota");
+        userCredentialsRepository.saveAll(List.of(userEntity, rootEntity));
     }
 
     private UserEntity prepareRootEntity(String password) {
