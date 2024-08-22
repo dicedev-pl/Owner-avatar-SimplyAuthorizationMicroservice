@@ -73,6 +73,10 @@ uprawnienia, które można przypisać:
 - ADD_RESERVATIONS
 - REMOVE_RESERVATIONS
 
+## Gdy nie zostaną podane dane użytkownika, zostaną stworzone dwa domyślne konta:
+user: Admin; password: AdminMaKota -> o prawami: ADD_USERS
+user: Root; password: RootMaKota -> ze wszystkimi uprawnieniami
+
 # ENGLISH VERSION
 
 ## SimplyAuthorizationMicroservice
@@ -152,3 +156,7 @@ Available permissions include:
   - ORDER_FOOD
   - ADD_RESERVATIONS
   - REMOVE_RESERVATIONS
+
+## When no user details are provided, two default accounts will be created:
+user: Admin; password: AdminMaKota -> with Rights: ADD_USERS
+user: Root; password: RootMaKota -> with all Rights
